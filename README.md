@@ -1,50 +1,56 @@
-# Stock-Portfolio-Tracker
-Stock Portfolio Tracker
+class StockPortfolio:
+    def __init__(self, name):
+        self.name = name
+        self.stock_prices= {"AAPL": 180, "TSLA": 250, "PCAL": 145, "FFC" :535, "LUCK" :416, "UBL" : 414, "OGDC" : 315}
 
-This is a simple Python-based Stock Portfolio Tracker that allows users to view available stocks and add stocks to their portfolio.
+        self.user_portfolio = {}
 
-Features
 
-- Display available stocks and their prices
-- Add stocks to the user's portfolio
-- Enter the stock symbol and quantity
-- Automatically calculate the total value based on the stock price
-- Handles stock symbols in uppercase
+    def display_available_stocks(self):
+        for stock , price in self.stock_prices.items():
+            print(f"Today, The price {stock} stock in pakistan is RS:{price}")
 
-Technologies Used
 
-- Python
-- Object-Oriented Programming (OOP)
-- Dictionaries
-- Classes and Methods
+    def add_stock(self, symbol, quantity):
+        clean_symbol = symbol.upper()
+        if clean_symbol in self.stock_prices:
+            if clean_symbol in self.user_portfolio:
+                self.user_portfolio[clean_symbol] += quantity
+            else:
+                self.user_portfolio[clean_symbol] = quantity
+        else:
+            print("This stock is not in List")
 
-How It Works
 
-The program contains a list of available stocks with their prices. The user can select a stock by entering its symbol and then specify the quantity they want to add.
+    def calculate_total(self):
+        total_value = 0
+        for symbol , quantity in self.user_portfolio.items():
+            price_of_stock = self.stock_prices[symbol]
+            total_value += quantity*price_of_stock
+        print(total_value)
 
-The portfolio is updated based on the selected stock and quantity.
 
-Example Stocks
+    def save_to_file(self):
+        clean_name = self.name.lower().strip()
+        filename = f"{clean_name}_stocks_details.txt"
+        with open(f"{filename}", "w") as file:
+            file.write(f"-- {self.name.upper().strip()} STOCK PORTFOLIO --\n")
+            grand_total = 0
+            for symbol, quantity in self.user_portfolio.items():
+                price = self.stock_prices[symbol]
+                item_total = price * quantity
+                grand_total += item_total
+                file.write(f"Stock: {symbol} | Qty: {quantity} | Price: RS:{price} | Total: RS:{item_total}\n")
+            text = str(grand_total)
+            file.write("----------------------------\n")
+            file.write(f"Total investment value : RS:{text}\n")
 
-- AAPL — 180
-- TSLA — 250
-- PCAL — 145
-- FFC — 535
-- LUCK — 416
-- UBL — 414
-- OGDC — 315
 
-Project Structure
+joun = StockPortfolio("Joun")
+joun.add_stock("AAPL", 2)
+joun.save_to_file()
 
-Stock-Portfolio-Tracker/
-│
-├── StockPortfolio.py
-└── README.md
 
-Purpose
-
-I created this project to practice Python programming and Object-Oriented Programming concepts while building a simple real-world application related to stock portfolios.
-
-Author
-
-Joun
+ali = StockPortfolio("Ali")
+ali.add_stock("OGDC", 5)
+ali.save_to_file()
